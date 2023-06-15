@@ -74,11 +74,9 @@ class _Selling_ScreenState extends State<Selling_Screen> {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("Selling");
 
-    num firstNumber = int.parse(_firstNumberController.text);
     num secondNumber = int.parse(_secondNumberController.text);
 
     Map<String, dynamic> selling = {
-      "firstNumber": firstNumber,
       "secondNumber": secondNumber,
       "type": _type,
       "count": _counter,

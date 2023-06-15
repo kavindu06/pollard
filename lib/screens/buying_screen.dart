@@ -37,33 +37,6 @@ class _Buying_ScreenState extends State<Buying_Screen> {
     secondNumber = secondNumber;
   }
 
-  // getStudentName(name){
-  //   studentName = name;
-  // }
-
-  // createData() {
-  //   print('created');
-
-  //   String formattedDate = DateFormat('yyyy-MM-dd-kk:mm').format(now);
-
-  //   DocumentReference documentReference =
-  //       FirebaseFirestore.instance.collection("Selling").doc(formattedDate);
-
-  //   num firstNumber = int.parse(_firstNumberController.text);
-  //   num secondNumber = int.parse(_secondNumberController.text);
-
-  //   Map<String, dynamic> selling = {
-  //     // "studentName": studentName,
-  //     "firstNumber": firstNumber,
-  //     "secondNumber": secondNumber,
-  //     "type": _type,
-  //     "count": _counter,
-  //   };
-
-  //   documentReference.set(selling).whenComplete(() {
-  //     print('$_counter  created');
-  //   });
-  // }
   createData() {
     print('created');
 
@@ -73,6 +46,8 @@ class _Buying_ScreenState extends State<Buying_Screen> {
 
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("Buying");
+    CollectionReference collectionReference2 =
+        FirebaseFirestore.instance.collection("stock");
 
     num firstNumber = int.parse(_firstNumberController.text);
     num secondNumber = int.parse(_secondNumberController.text);
@@ -85,7 +60,14 @@ class _Buying_ScreenState extends State<Buying_Screen> {
       "date": now,
       "value": _result,
     };
+    Map<String, dynamic> stock = {
+      "secondNumber": secondNumber,
+      "type": _type,
+    };
 
+    collectionReference2.doc('$_type').set(stock).whenComplete(() {
+      print('stock created');
+    });
     collectionReference.doc(formattedDate).set(selling).whenComplete(() {
       print('$_counter created');
     });
