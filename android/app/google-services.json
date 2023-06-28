@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "751023042667",
+    "project_id": "pollard-7a5f3",
+    "storage_bucket": "pollard-7a5f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751023042667:android:f3099ed9e4352dbb24412e",
+        "android_client_info": {
+          "package_name": "com.example.pollard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751023042667-tj9paemdloi1neuumuuqbao48l2q15bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu8rL07Zo_O-qkIuS6TfirnS7QjA7JPbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751023042667-tj9paemdloi1neuumuuqbao48l2q15bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
