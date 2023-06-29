@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,17 +55,6 @@ class _SalesScreenState extends State<SalesScreen>
           Container(
               // ...
               ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-            onPressed: () {
-              readData(0);
-              readData(1);
-              readData(2);
-            },
-            child: const Text('Read'),
-          ),
           TextFormField(
             controller: _startDateController,
             readOnly: true,
@@ -80,6 +70,17 @@ class _SalesScreenState extends State<SalesScreen>
             decoration: InputDecoration(
               labelText: 'End Date',
             ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.lightBlueAccent,
+            ),
+            onPressed: () {
+              readData(0);
+              readData(1);
+              readData(2);
+            },
+            child: const Text('Read'),
           ),
           Expanded(
             child: ReusableCard(
@@ -255,8 +256,13 @@ class _SalesScreenState extends State<SalesScreen>
   }
 
   readData(int type) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    User? user = auth.currentUser;
+    String userId = user!.uid;
+
     CollectionReference newCollection =
-        FirebaseFirestore.instance.collection("Selling");
+        FirebaseFirestore.instance.collection("users/$userId/Selling");
 
     QuerySnapshot snapshot;
 

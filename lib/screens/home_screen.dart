@@ -8,7 +8,7 @@ import 'package:pollard/screens/sales_screen.dart';
 import 'package:pollard/screens/wallet_screen.dart';
 import 'package:pollard/screens/welcome_screen.dart';
 
-import 'inventory_screen.dart';
+import 'stock_screen.dart';
 
 class Home_Screen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -138,7 +138,7 @@ class _Home_ScreenState extends State<Home_Screen>
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Inventory_Screen.id);
+                  Navigator.pushNamed(context, Stock_Screen.id);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -154,7 +154,7 @@ class _Home_ScreenState extends State<Home_Screen>
                         color: Colors.white,
                       ),
                       Text(
-                        "Inventory",
+                        "Stock",
                         style: TextStyle(color: Colors.white, fontSize: 30),
                       )
                     ],

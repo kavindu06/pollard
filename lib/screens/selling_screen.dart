@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pollard/screens/day_sales_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Selling_Screen extends StatefulWidget {
   static const String id = 'selling_screen';
@@ -26,6 +27,7 @@ class _Selling_ScreenState extends State<Selling_Screen> {
   int _counter = 0;
 
   late String studentName;
+  // String userId = '';
 
   DateTime now = DateTime.now();
 
@@ -64,61 +66,68 @@ class _Selling_ScreenState extends State<Selling_Screen> {
   //     print('$_counter  created');
   //   });
   // }
-createData() async {
-  print('created');
 
-  DateTime now = DateTime.now();
-  print(now);
-  String formattedDate = DateFormat('yyyy-MM-dd-kk:mm:ss').format(now);
+  createData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-  CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection("Selling");
+    User? user = auth.currentUser;
+    String userId = user!.uid;
 
-  CollectionReference collectionReference2 =
-      FirebaseFirestore.instance.collection("Stock");
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+    print('created');
+    print('User ID: $userId');
 
-  num firstNumber = int.parse(_firstNumberController.text);
-  int secondNumber = int.parse(_secondNumberController.text);
+    DateTime now = DateTime.now();
+    print(now);
+    String formattedDate = DateFormat('yyyy-MM-dd-kk:mm:ss').format(now);
 
-  Map<String, dynamic> selling = {
-    "firstNumber": firstNumber,
-    "secondNumber": secondNumber,
-    "type": _type,
-    "count": _counter,
-    "date": now,
-    "value": _result,
-  };
-  Map<String, dynamic> stock = {
-    "secondNumber": secondNumber,
-    "type": _type,
-  };
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("users/$userId/Selling");
 
-  collectionReference.doc(formattedDate).set(selling).whenComplete(() {
-    print('$_counter created');
-  });
+    CollectionReference collectionReference2 =
+        FirebaseFirestore.instance.collection("users/$userId/Stock");
 
-  // Update stock quantity in Firestore
-  DocumentSnapshot snapshot =
-      await firestore.collection('Stock').doc('$_type').get();
-  int currentQuantity =
-      (snapshot.data() as Map<String, dynamic>)['secondNumber'] as int;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-   // Calculate the updated quantity after selling
-  int updatedQuantity = currentQuantity - secondNumber;
+    num firstNumber = int.parse(_firstNumberController.text);
+    int secondNumber = int.parse(_secondNumberController.text);
 
-  // Ensure the updated quantity does not go below zero
-  if (updatedQuantity < 0) {
-    updatedQuantity = 0;
+    Map<String, dynamic> selling = {
+      "firstNumber": firstNumber,
+      "secondNumber": secondNumber,
+      "type": _type,
+      "count": _counter,
+      "date": now,
+      "value": _result,
+    };
+    Map<String, dynamic> Stock = {
+      "secondNumber": secondNumber,
+      "type": _type,
+    };
+
+    collectionReference.doc(formattedDate).set(selling).whenComplete(() {
+      print('$_counter created');
+    });
+
+    // Update stock quantity in Firestore
+    DocumentSnapshot snapshot =
+        await firestore.collection("users/$userId/Stock").doc('$_type').get();
+    int currentQuantity =
+        (snapshot.data() as Map<String, dynamic>)['secondNumber'] as int;
+
+    // Calculate the updated quantity after selling
+    int updatedQuantity = currentQuantity - secondNumber;
+
+    // Ensure the updated quantity does not go below zero
+    if (updatedQuantity < 0) {
+      updatedQuantity = 0;
+    }
+
+    // Update the stock quantity in Firestore
+    await firestore
+        .collection("users/$userId/Stock")
+        .doc('$_type')
+        .update({'secondNumber': updatedQuantity});
   }
-
-  // Update the stock quantity in Firestore
-  await firestore
-      .collection('Stock')
-      .doc('$_type')
-      .update({'secondNumber': updatedQuantity});
-}
-
 
   void _incrementCounter() {
     setState(() {

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pollard/components/reusable_card.dart';
 import 'package:pollard/constant.dart';
@@ -37,57 +38,60 @@ class _Buying_ScreenState extends State<Buying_Screen> {
     secondNumber = secondNumber;
   }
 
- 
   createData() async {
-  print('created');
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-  DateTime now = DateTime.now();
-  print(now);
-  String formattedDate = DateFormat('yyyy-MM-dd-kk:mm:ss').format(now);
+    User? user = auth.currentUser;
+    String userId = user!.uid;
+    print('created');
 
-  CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection("Buying");
+    DateTime now = DateTime.now();
+    print(now);
+    String formattedDate = DateFormat('yyyy-MM-dd-kk:mm:ss').format(now);
 
-  CollectionReference collectionReference2 =
-      FirebaseFirestore.instance.collection("Stock");
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("users/$userId/Buying");
 
-  num firstNumber = int.parse(_firstNumberController.text);
-  int secondNumber = int.parse(_secondNumberController.text);
+    CollectionReference collectionReference2 =
+        FirebaseFirestore.instance.collection("users/$userId/Stock");
 
-  Map<String, dynamic> selling = {
-    "firstNumber": firstNumber,
-    "secondNumber": secondNumber,
-    "type": _type,
-    "count": _counter,
-    "date": now,
-    "value": _result,
-  };
-  Map<String, dynamic> stock = {
-    "secondNumber": secondNumber,
-    "type": _type,
-  };
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  collectionReference.doc(formattedDate).set(selling).whenComplete(() {
-    print('$_counter created');
-  });
+    num firstNumber = int.parse(_firstNumberController.text);
+    int secondNumber = int.parse(_secondNumberController.text);
 
-  // Update stock quantity in Firestore
-  DocumentSnapshot snapshot =
-      await firestore.collection('Stock').doc('$_type').get();
-  int currentQuantity =
-      (snapshot.data() as Map<String, dynamic>)['secondNumber'] as int;
+    Map<String, dynamic> Buying = {
+      "firstNumber": firstNumber,
+      "secondNumber": secondNumber,
+      "type": _type,
+      "count": _counter,
+      "date": now,
+      "value": _result,
+    };
+    Map<String, dynamic> Stock = {
+      "secondNumber": secondNumber,
+      "type": _type,
+    };
 
-  // Calculate the updated quantity after buying
-  int updatedQuantity = currentQuantity + secondNumber;
+    collectionReference.doc(formattedDate).set(Buying).whenComplete(() {
+      print('$_counter created');
+    });
 
-  // Update the stock quantity in Firestore
-  await firestore
-      .collection('Stock')
-      .doc('$_type')
-      .update({'secondNumber': updatedQuantity});
-}
+    // Update stock quantity in Firestore
+    DocumentSnapshot snapshot =
+        await firestore.collection("users/$userId/Stock").doc('$_type').get();
+    int currentQuantity =
+        (snapshot.data() as Map<String, dynamic>)['secondNumber'] as int;
 
+    // Calculate the updated quantity after buying
+    int updatedQuantity = currentQuantity + secondNumber;
+
+    // Update the stock quantity in Firestore
+    await firestore
+        .collection("users/$userId/Stock")
+        .doc('$_type')
+        .update({'secondNumber': updatedQuantity});
+  }
 
   void _incrementCounter() {
     setState(() {

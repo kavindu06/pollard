@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pollard/screens/selling_screen.dart';
-import 'package:intl/intl.dart';
 
-class Day_Sales_Screen extends StatefulWidget {
-  static const String id = 'day_sales_screen';
-  const Day_Sales_Screen({Key? key}) : super(key: key);
+class Stock_Screen extends StatefulWidget {
+  static const String id = 'stock_screen';
 
   @override
-  State<Day_Sales_Screen> createState() => _Day_Sales_ScreenState();
+  State<Stock_Screen> createState() => _Stock_ScreenState();
 }
 
-class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
+class _Stock_ScreenState extends State<Stock_Screen> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -21,20 +19,13 @@ class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
     User? user = auth.currentUser;
     String userId = user!.uid;
 
-    DateTime now = DateTime.now();
-    DateTime today =
-        DateTime(now.year, now.month, now.day); // Get current date without time
-    Timestamp startTimestamp = Timestamp.fromDate(today);
-    Timestamp endTimestamp = Timestamp.fromDate(today.add(Duration(days: 1)));
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Data Set'),
+        title: const Text('Stock'),
         backgroundColor: const Color(0xFF0A0E21),
         leading: const Icon(Icons.dataset_linked),
       ),
       body: SingleChildScrollView(
-        reverse: false,
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
@@ -46,17 +37,7 @@ class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
                     Expanded(
-                      child: Text('Sales', style: TextStyle(fontSize: 20.0)),
-                    ),
-                    Expanded(
                         child: Text("Item", style: TextStyle(fontSize: 20.0))),
-                    Expanded(
-                      child:
-                          Text('Unit Price', style: TextStyle(fontSize: 20.0)),
-                    ),
-                    SizedBox(
-                      width: 15.0,
-                    ),
                     Expanded(
                       child: Text('Quantity', style: TextStyle(fontSize: 20.0)),
                     ),
@@ -66,9 +47,7 @@ class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
             ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection("users/$userId/Selling")
-                  .where("date", isGreaterThanOrEqualTo: startTimestamp)
-                  .where("date", isLessThan: endTimestamp)
+                  .collection("users/$userId/Stock")
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -85,21 +64,12 @@ class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
                               // Expanded(
                               //   child: Text(documentSnapshot["studentName"]),
                               // ),
-                              Expanded(
-                                child: Text(
-                                  documentSnapshot["count"].toString(),
-                                  style: TextStyle(fontSize: 20.0),
-                                ),
-                              ),
+
                               Expanded(
                                 child: Text(documentSnapshot["type"].toString(),
                                     style: TextStyle(fontSize: 20.0)),
                               ),
-                              Expanded(
-                                child: Text(
-                                    documentSnapshot["firstNumber"].toString(),
-                                    style: TextStyle(fontSize: 20.0)),
-                              ),
+
                               Expanded(
                                 child: Text(
                                     documentSnapshot["secondNumber"].toString(),
@@ -120,19 +90,6 @@ class _Day_Sales_ScreenState extends State<Day_Sales_Screen> {
                 }
               },
             ),
-
-            //  ElevatedButton(
-
-            //   onPressed: () => {
-            //     Navigator.pushNamed(context, MultiplicationScreen.id),
-            //   },
-            //   child: const Text('RE-CALCULATE',style: TextStyle(fontSize: 30,color: Colors.white),),
-            //   style: ElevatedButton.styleFrom(
-            //     primary: Color(0xFFEB1555),
-            //     shadowColor: Colors.blue,
-
-            //      ),
-            // ),
           ],
         ),
       ),
