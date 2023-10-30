@@ -146,7 +146,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cashier'),
+        title: Text('Wallet'),
         backgroundColor: const Color(0xFF0A0E21),
         centerTitle: true,
         shadowColor: Colors.transparent,
