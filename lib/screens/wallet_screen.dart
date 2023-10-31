@@ -121,25 +121,35 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
 
   readData2() async {
     FirebaseAuth auth = FirebaseAuth.instance;
+
     User? user = auth.currentUser;
     String userId = user!.uid;
 
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('users/$userId/Start Cashier');
+    CollectionReference newCollection =
+        FirebaseFirestore.instance.collection("users/$userId/Start Cashier");
 
-    QuerySnapshot querySnapshot = await collectionReference.get();
+    QuerySnapshot snapshot;
 
-    if (querySnapshot.docs.isNotEmpty) {
-      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        int initialNumber = data['initialNumber'] as int;
-        DateTime date = (data['date'] as Timestamp).toDate();
-        print('Initial Number: $initialNumber, Date: $date');
-      }
-    } else {
-      print('No data found.');
+    DateTime now = DateTime.now();
+    DateTime today =
+        DateTime(now.year, now.month, now.day); // Get current date without time
+    Timestamp startTimestamp = Timestamp.fromDate(today);
+    Timestamp endTimestamp = Timestamp.fromDate(today.add(Duration(days: 1)));
+
+    snapshot = await newCollection
+        .where('date', isGreaterThanOrEqualTo: startTimestamp)
+        .where('date', isLessThanOrEqualTo: endTimestamp)
+        .get();
+    int inNumber = 0;
+    for (QueryDocumentSnapshot docSnapshot in snapshot.docs) {
+      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      int initialNumber = data['initialNumber'] as int;
+      inNumber = initialNumber;
+      print('Initial Number: $inNumber');
     }
+    setState(() {
+      startNumber = inNumber;
+    });
   }
 
   @override
@@ -184,6 +194,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
             onPressed: () => {
               createData(),
               _initialNumberController.clear(),
+              FocusManager.instance.primaryFocus?.unfocus(),
             },
             child: const Text('Add'),
           ),
@@ -392,7 +403,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('jk',
+                        child: Text('',
                             style: TextStyle(
                               fontSize: 20,
                             )),
@@ -417,12 +428,12 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.lightBlueAccent,
             ),
-            onPressed: () {
-              readData(0);
-              readData(1);
-              readData(2);
-              readData2();
-              calculateTotalValue();
+            onPressed: () => {
+              readData(0),
+              readData(1),
+              readData(2),
+              readData2(),
+              calculateTotalValue(),
             },
             child: const Text('Read'),
           ),
@@ -431,9 +442,11 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
     );
   }
 
-  void calculateTotalValue() async {
-    totalValue = totalCoconutValue + totalCoconutOilValue + totalOtherValue;
-    totalQuantity = totalCoconut + totalCoconutOil + totalOther;
-    endTotal = totalValue + startNumber;
+  void calculateTotalValue() {
+    setState(() {
+      totalValue = totalCoconutValue + totalCoconutOilValue + totalOtherValue;
+      totalQuantity = totalCoconut + totalCoconutOil + totalOther;
+      endTotal = totalValue + startNumber;
+    });
   }
 }
