@@ -28,7 +28,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
   int totalQuantity = 0;
   int totalValue = 0;
   int endTotal = 0;
-  int startNumber = 0;
+  int startNumber = 100;
 
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
@@ -134,8 +134,13 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
         int initialNumber = data['initialNumber'] as int;
-        DateTime date = (data['date'] as Timestamp).toDate();
-        print('Initial Number: $initialNumber, Date: $date');
+        DateTime now = DateTime.now();
+        DateTime today = DateTime(
+            now.year, now.month, now.day); // Get current date without time
+        Timestamp startTimestamp = Timestamp.fromDate(today);
+        Timestamp endTimestamp =
+            Timestamp.fromDate(today.add(Duration(days: 1)));
+        print('Initial Number: $initialNumber');
       }
     } else {
       print('No data found.');
@@ -184,6 +189,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
             onPressed: () => {
               createData(),
               _initialNumberController.clear(),
+              FocusManager.instance.primaryFocus?.unfocus(),
             },
             child: const Text('Add'),
           ),
@@ -392,7 +398,7 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('jk',
+                        child: Text('',
                             style: TextStyle(
                               fontSize: 20,
                             )),
@@ -417,12 +423,13 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.lightBlueAccent,
             ),
-            onPressed: () {
-              readData(0);
-              readData(1);
-              readData(2);
-              readData2();
-              calculateTotalValue();
+            onPressed: () => {
+              readData(0),
+              readData(1),
+              readData(2),
+              readData2(),
+              calculateTotalValue(),
+              
             },
             child: const Text('Read'),
           ),
@@ -431,9 +438,11 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
     );
   }
 
-  void calculateTotalValue() async {
-    totalValue = totalCoconutValue + totalCoconutOilValue + totalOtherValue;
-    totalQuantity = totalCoconut + totalCoconutOil + totalOther;
-    endTotal = totalValue + startNumber;
+  void calculateTotalValue() {
+    setState(() {
+      totalValue = totalCoconutValue + totalCoconutOilValue + totalOtherValue;
+      totalQuantity = totalCoconut + totalCoconutOil + totalOther;
+      endTotal = totalValue + 100;
+    });
   }
 }

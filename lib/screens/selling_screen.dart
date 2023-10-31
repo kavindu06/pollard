@@ -233,7 +233,7 @@ class _Selling_ScreenState extends State<Selling_Screen> {
                                   keyboardType: TextInputType.number,
                                   controller: _firstNumberController,
                                   decoration: const InputDecoration(
-                                    labelText: 'Mila',
+                                    labelText: 'Price',
                                   ),
                                   onChanged: (String firstNumber) {
                                     getFirstNumber(firstNumber);
