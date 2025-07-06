@@ -34,7 +34,7 @@ class _SalesScreenState extends State<SalesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sales'),
+        title: Text('Sales',style: TextStyle(color: Colors.blue),),
         backgroundColor: const Color(0xFF0A0E21),
         centerTitle: true,
         shadowColor: Colors.transparent,
@@ -43,10 +43,12 @@ class _SalesScreenState extends State<SalesScreen>
           child: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: colorstheme,
+              color: Colors.blue,
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ),
@@ -61,6 +63,7 @@ class _SalesScreenState extends State<SalesScreen>
             onTap: selectStartDate,
             decoration: InputDecoration(
               labelText: 'Start Date',
+              labelStyle: TextStyle(color: Colors.blue)
             ),
           ),
           TextFormField(
@@ -69,6 +72,7 @@ class _SalesScreenState extends State<SalesScreen>
             onTap: selectEndDate,
             decoration: InputDecoration(
               labelText: 'End Date',
+               labelStyle: TextStyle(color: Colors.blue)
             ),
           ),
           ElevatedButton(

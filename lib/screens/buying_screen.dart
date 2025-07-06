@@ -119,8 +119,8 @@ class _Buying_ScreenState extends State<Buying_Screen> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color(0xFF0A0E21),
-          title: Text('Buying'),
-          leading: const Icon(Icons.sell)),
+          title: Text('Buying',style: TextStyle( color: Colors.blue),),
+          leading: const Icon(Icons.sell,color: Colors.blue),),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -258,7 +258,7 @@ class _Buying_ScreenState extends State<Buying_Screen> {
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFFEB1555),
+              backgroundColor: Color(0xFFEB1555),
               shadowColor: Colors.blue,
             ),
           ),

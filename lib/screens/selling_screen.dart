@@ -111,22 +111,25 @@ class _Selling_ScreenState extends State<Selling_Screen> {
     // Update stock quantity in Firestore
     DocumentSnapshot snapshot =
         await firestore.collection("users/$userId/Stock").doc('$_type').get();
-    int currentQuantity =
-        (snapshot.data() as Map<String, dynamic>)['secondNumber'] as int;
+    
+    int currentQuantity = 0;
+if (snapshot.exists && snapshot.data() != null) {
+  currentQuantity = (snapshot.data() as Map<String, dynamic>)['secondNumber'] ?? 0;
+}
 
-    // Calculate the updated quantity after selling
-    int updatedQuantity = currentQuantity - secondNumber;
+// Calculate the updated quantity after selling
+int updatedQuantity = currentQuantity - secondNumber;
 
-    // Ensure the updated quantity does not go below zero
-    if (updatedQuantity < 0) {
-      updatedQuantity = 0;
-    }
+// Ensure the updated quantity does not go below zero
+if (updatedQuantity < 0) {
+  updatedQuantity = 0;
+}
 
-    // Update the stock quantity in Firestore
-    await firestore
-        .collection("users/$userId/Stock")
-        .doc('$_type')
-        .update({'secondNumber': updatedQuantity});
+// Update the stock quantity in Firestore
+await firestore
+    .collection("users/$userId/Stock")
+    .doc('$_type')
+    .update({'secondNumber': updatedQuantity});
   }
 
   void _incrementCounter() {
@@ -153,10 +156,12 @@ class _Selling_ScreenState extends State<Selling_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+       appBar: AppBar(
           backgroundColor: const Color(0xFF0A0E21),
-          title: Text('Selling'),
-          leading: const Icon(Icons.sell)),
+          title: Text('Selling',style: TextStyle(color: Colors.lightBlueAccent),),
+          leading: IconButton(onPressed: () {
+            Navigator.pop(context);
+          },icon:Icon(Icons.arrow_back_ios) ,color: Colors.lightBlueAccent,),),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -293,10 +298,16 @@ class _Selling_ScreenState extends State<Selling_Screen> {
               'CALCULATE',
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFFEB1555),
+            
+              
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFEB1555),
               shadowColor: Colors.blue,
             ),
+            
+          ),
+          SizedBox(
+            height: 40,
           ),
         ],
       ),

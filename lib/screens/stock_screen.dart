@@ -21,9 +21,9 @@ class _Stock_ScreenState extends State<Stock_Screen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stock'),
+        title: const Text('Stock',style: TextStyle(color: Colors.blue),),
         backgroundColor: const Color(0xFF0A0E21),
-        leading: const Icon(Icons.dataset_linked),
+        leading: const Icon(Icons.dataset_linked, color: Colors.blue, size: 30.0),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

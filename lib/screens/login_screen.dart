@@ -30,7 +30,7 @@ class _Login_ScreenState extends State<Login_Screen> {
               tag:'logo',
               child: Container(
                 height: 200.0,
-                // child: Image.asset('images/logo.png'),
+                child: Image.asset('images/logo.png'),
               ),
             ),
             SizedBox(
@@ -44,6 +44,9 @@ class _Login_ScreenState extends State<Login_Screen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your email',
+                hintStyle: TextStyle(
+                  color: Colors.lightBlueAccent,
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -72,6 +75,9 @@ class _Login_ScreenState extends State<Login_Screen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your password.',
+                hintStyle: TextStyle(
+                  color: Colors.lightBlueAccent,
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
