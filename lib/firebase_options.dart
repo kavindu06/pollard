@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'pollard-7a5f3.firebasestorage.app',
     iosBundleId: 'com.example.pollard',
   );
+
 }
