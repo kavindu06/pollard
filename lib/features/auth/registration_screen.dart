@@ -1,10 +1,6 @@
-import 'package:pollard/screens/day_sales_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pollard/screens/home_screen.dart';
-import 'package:pollard/screens/selling_screen.dart';
-import 'day_sales_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:pollard/features/shell/main_shell.dart';
 
 class Registration_Screen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -104,7 +100,7 @@ class _Registration_ScreenState extends State<Registration_Screen> {
                             .createUserWithEmailAndPassword(
                             email: email, password: password);
                         if(newUser !=null){
-                          Navigator.pushNamed(context, Home_Screen.id);
+                          Navigator.pushReplacementNamed(context, MainShell.id);
                         }
                       }
                       catch(e){

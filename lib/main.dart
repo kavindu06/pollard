@@ -1,17 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pollard/screens/analytics_screen.dart';
-import 'package:pollard/screens/buying_screen.dart';
-import 'package:pollard/screens/day_sales_screen.dart';
-import 'package:pollard/screens/home_screen.dart';
-import 'package:pollard/screens/stock_screen.dart';
-import 'package:pollard/screens/login_screen.dart';
-import 'package:pollard/screens/registration_screen.dart';
-import 'package:pollard/screens/sales_screen.dart';
-import 'package:pollard/screens/wallet_screen.dart';
+import 'package:pollard/features/dashboard/analytics_screen.dart';
+import 'package:pollard/features/inventory/buying_screen.dart';
+import 'package:pollard/features/billing/day_sales_screen.dart';
+import 'package:pollard/features/dashboard/home_screen.dart';
+import 'package:pollard/features/inventory/stock_screen.dart';
+import 'package:pollard/features/auth/login_screen.dart';
+import 'package:pollard/features/auth/registration_screen.dart';
+import 'package:pollard/features/billing/sales_screen.dart';
+import 'package:pollard/features/billing/wallet_screen.dart';
+import 'package:pollard/theme/app_theme.dart';
 
-import 'package:pollard/screens/welcome_screen.dart';
-import 'screens/selling_screen.dart';
+import 'package:pollard/features/auth/welcome_screen.dart';
+import 'package:pollard/features/shell/main_shell.dart';
+import 'package:pollard/features/profile/profile_screen.dart';
+import 'package:pollard/features/billing/selling_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,14 +27,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        primaryColor: Color(0xFF0A0E21),
-        scaffoldBackgroundColor: Color(0xFF0A0E21),
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: Colors.purple),
-      ),
+      theme: buildAppTheme(),
       initialRoute: Welcome_Screen.id,
       routes: {
+        MainShell.id: (context) => const MainShell(),
+        Profile_Screen.id: (context) => const Profile_Screen(),
         Selling_Screen.id: (context) => Selling_Screen(),
         Buying_Screen.id: (context) => Buying_Screen(),
         Welcome_Screen.id: (context) => Welcome_Screen(),
